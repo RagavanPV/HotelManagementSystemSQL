@@ -191,7 +191,7 @@ CREATE TABLE `orderdetails` (
   KEY `fk_item_order` (`itemId`),
   CONSTRAINT `fk_item_order` FOREIGN KEY (`itemId`) REFERENCES `fooditems` (`id`),
   CONSTRAINT `fk_seat_order` FOREIGN KEY (`seatId`) REFERENCES `hotelseat` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
 
 /*Data for the table `orderdetails` */
 
@@ -207,9 +207,19 @@ insert  into `orderdetails`(`id`,`orderNo`,`seatId`,`itemId`,`qtyNo`,`orderDate`
 
 (72,1,1,2,45,'2016-12-29 09:30:41',0),
 
-(73,2,2,12,8,'2016-12-29 19:57:10',0),
+(73,2,2,12,8,'2016-12-29 19:57:10',1),
 
-(74,2,2,7,45,'2016-12-29 19:57:38',0);
+(74,2,2,7,45,'2016-12-29 19:57:38',1),
+
+(75,3,2,7,12,'2016-12-29 15:20:29',0),
+
+(76,3,2,6,6,'2016-12-29 15:21:24',0),
+
+(77,3,2,11,6,'2016-12-29 15:21:41',0),
+
+(78,3,2,12,6,'2016-12-29 19:22:29',0),
+
+(79,3,2,13,18,'2016-12-29 19:22:51',0);
 
 /*Table structure for table `orderlimit` */
 
@@ -414,11 +424,11 @@ BEGIN
 
 
 
-					IF orderCount< (SELECT maxno FROM orderlimit) THEN
+					
 
 						if exists(select id from orderdetails where orderNo=orderSno and itemId=itemNoVar and date(orderDate)=curdate()) then
 
-							IF qtyVar>=qtyConsume+qty AND taken IS NOT NULL THEN
+							IF qtyVar>=qtyConsume+qty AND taken IS NOT NULL THEN	
 
 							UPDATE orderdetails SET qtyNo=qty+taken WHERE orderNo=orderSno AND itemId=itemNoVar AND DATE(orderDate)=curdate();
 
@@ -434,9 +444,17 @@ BEGIN
 
 							if qtyVar>=qtyConsume+Qty OR qtyConsume IS NULL THEN
 
-							INSERT INTO orderdetails(orderNo,seatId,itemId,qtyNo) VALUES(orderSno,seatNoVar,itemNoVar,Qty);
+								IF orderCount< (SELECT maxno FROM orderlimit) THEN
 
-							SELECT concat("Your order has been taken Please wait for some time and orderNumber is",orderSno);
+								INSERT INTO orderdetails(orderNo,seatId,itemId,qtyNo) VALUES(orderSno,seatNoVar,itemNoVar,Qty);
+
+								SELECT concat("Your order has been taken Please wait for some time and orderNumber is",orderSno);
+
+								ELSE
+
+								SELECT "You can only order 5 items per order";
+
+								END IF;
 
 							ELSE
 
@@ -446,11 +464,7 @@ BEGIN
 
 						end if;
 
-					else
-
-					select "You can only order 5 items per order";
-
-					end if;
+					
 
 				else
 
