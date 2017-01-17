@@ -1,7 +1,3 @@
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`hms` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `hms`;
-
 /*Table structure for table `bill_details` */
 
 DROP TABLE IF EXISTS `bill_details`;
@@ -15,9 +11,7 @@ CREATE TABLE `bill_details` (
   PRIMARY KEY (`id`),
   KEY `fk_seat_bill` (`seat_id`),
   CONSTRAINT `fk_seat_bill` FOREIGN KEY (`seat_id`) REFERENCES `hotel_seat` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
-/*Data for the table `bill_details` */
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `order_details` */
 
@@ -35,21 +29,4 @@ CREATE TABLE `order_details` (
   KEY `fk_bill_no` (`bill_no`),
   CONSTRAINT `fk_bill_no` FOREIGN KEY (`bill_no`) REFERENCES `bill_details` (`id`),
   CONSTRAINT `fk_item_id` FOREIGN KEY (`item_id`) REFERENCES `food_items` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-
-/*Data for the table `order_details` */
-
-/*Table structure for table `order_limit` */
-
-DROP TABLE IF EXISTS `order_limit`;
-
-CREATE TABLE `order_limit` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
-  `max_no` int(5) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-/*Data for the table `order_limit` */
-
-insert  into `order_limit`(`id`,`max_no`) values (1,5);
-
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;

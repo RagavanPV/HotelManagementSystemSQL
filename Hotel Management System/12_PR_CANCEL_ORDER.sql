@@ -1,6 +1,6 @@
 /* Procedure structure for procedure `PR_CANCEL_ORDER` */
 
-DROP PROCEDURE IF EXISTS  `PR_CANCEL_ORDER`;
+DROP PROCEDURE IF EXISTS  `PR_CANCEL_ORDER` ;
 
 DELIMITER $$
 
@@ -13,7 +13,7 @@ declare billSno int;
 declare presentqty int;
 	IF (SELECT FN_CHECK_ITEM(item)) THEN
 	SELECT id INTO itemSno FROM food_items WHERE items=item;
-		if exists(select id from hotel_seat where seat_no=seatname) then
+		IF (SELECT FN_CHECK_SEAT(seatname)) THEN  
 			select id into seatSno from hotel_seat where seat_no=seatname;
 			select FN_GET_ORDER_NUMBER(seatSno) into orderSno;
 			select id into billSno from bill_details where `order_no`=orderSno and date(order_date)=curdate();
@@ -32,7 +32,7 @@ declare presentqty int;
 					select "Cannot cancel";
 					end if;
 				else
-				select "Cannot Cancel .Invalid Quantity";
+				select "Invalid item name or Invalid Quantity";
 				end if;
 			else
 			select "You cannot cancel the paid items";
@@ -42,7 +42,6 @@ declare presentqty int;
 		end if;
 	else
 	select "Invalid Item";
-	end if;
-			
+	end if;	
 	END $$
 DELIMITER ;

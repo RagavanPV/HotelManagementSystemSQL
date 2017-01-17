@@ -1,6 +1,6 @@
 /* Procedure structure for procedure `PR_PLACE_ORDERS` */
 
-/*!50003 DROP PROCEDURE IF EXISTS  `PR_PLACE_ORDERS` */;
+DROP PROCEDURE IF EXISTS  `PR_PLACE_ORDERS` ;
 
 DELIMITER $$
 
@@ -14,8 +14,8 @@ BEGIN
           DECLARE nextItemLength INT DEFAULT NULL;
           DECLARE nextItemValue TEXT DEFAULT NULL;
           DECLARE nextQuantityValue TEXT DEFAULT NULL;
-          IF EXISTS(SELECT id FROM `hotel_seat` WHERE seat_no=seatSno) THEN  
-          if (select status from hotel_seat where seat_no=seatSno) then
+          IF (select FN_CHECK_SEAT(seatSno)) THEN  
+          if (select FN_CHECK_SEAT_STATUS(seatSno)) then
           select "Seat Is taken Please wait";
           else
           SELECT LENGTH(itemList) - LENGTH(REPLACE(itemList, ',', ''))+1 into totItem;

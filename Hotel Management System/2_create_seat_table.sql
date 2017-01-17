@@ -1,7 +1,3 @@
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`hms` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `hms`;
-
 /*Table structure for table `hotel_seat` */
 
 DROP TABLE IF EXISTS `hotel_seat`;
