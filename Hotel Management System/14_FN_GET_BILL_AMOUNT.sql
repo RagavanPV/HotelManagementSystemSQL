@@ -3,7 +3,7 @@
 drop function if exists `FN_GET_BILL_AMOUNT`;
 delimiter $$
 
-create function `FN_GETBIL_AMOUNT`(orderSno int) returns int(11)
+create function `FN_GET_BILL_AMOUNT`(orderSno int) returns int(11)
 begin
     declare cost int;
     declare billSno int;
