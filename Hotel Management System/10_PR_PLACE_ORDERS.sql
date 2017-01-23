@@ -43,8 +43,8 @@ BEGIN
 			 SET quantityList = INSERT(quantityList,1,nextQuantityLength + 1,'');
 			 
 		   END LOOP;   
-		   commit;
 		   UPDATE hotel_seat SET STATUS=0 WHERE seat_no=seatSno;
+		   commit;
 		   else
 		   select "Invalid Entry or enter equal items and qty";
 		   end if;
