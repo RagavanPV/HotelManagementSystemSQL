@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS  `PR_CANCEL_ORDER` ;
 
 DELIMITER $$
 
-CREATE PROCEDURE `PR_CANCEL_ORDER`(in seatname varchar(10),IN item VARCHAR(100),IN qty INT)
+CREATE PROCEDURE `PR_CANCEL_ORDER`(in seatname varchar(10),IN item VARCHAR(100),IN qty INT,OUT message MEDIUMTEXT)
 BEGIN
 declare itemSno int;
 declare seatSno int;
@@ -23,25 +23,29 @@ declare presentqty int;
 					if exists(select id from order_details where bill_no=billSno and item_id=itemSno and date(order_date)=curdate() and status="Cancelled") then
 					UPDATE order_details SET qty_no=qty_no-qty WHERE bill_no=billSno AND item_id=itemSno AND DATE(order_date)=CURDATE() and status="Ordered";
 					update order_details set qty_no=qty_no+qty where bill_no=billSno and item_id=itemSno and date(order_date)=curdate() and status="Cancelled";
-					select "Order Cancelled";
+					set message= "Order Cancelled";
 					elseif exists(select id from order_details where bill_no=billSno and item_id=itemSno and date(order_date)=curdate()) then
 					update order_details set qty_no=qty_no-qty where bill_no=billSno and item_id=itemSno and date(order_date)=curdate() and status="Ordered";
 					insert into order_details(bill_no,item_id,qty_no,status) values(billSno,itemSno,qty,"Cancelled");
-					select "Order Cancelled";
+					set message= "Order Cancelled";
 					else
-					select "Cannot cancel";
+					set message "Cannot cancel";
+					end if;
+					IF not exists(select 1 from order_details where bill_no=billSno and qty_no!=0 and status="Ordered" and date(order_date)=curdate()) then
+					set message= "Entire Order Has been Cancelled"";
+					call PR_PAY_BILLS(orderSno,@out);
 					end if;
 				else
-				select "Invalid item name or Invalid Quantity";
+				set message= "Invalid item name or Invalid Quantity";
 				end if;
 			else
-			select "You cannot cancel the paid items";
+			set message= "You cannot cancel the paid items";
 			end if;
 		else
-		select "invalid seat no";
+		set message= "invalid seat no";
 		end if;
 	else
-	select "Invalid Item";
+	set message= "Invalid Item";
 	end if;	
 	END $$
 DELIMITER ;
