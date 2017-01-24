@@ -8,7 +8,7 @@ begin
     declare cost int;
     declare billSno int;
     select id into billSno from bill_details where order_no=orderSno and date(order_date)=curdate();
-select sum(qty_no*food_items.price) into cost from order_details join food_items on food_items.`id`=order_details.`item_id` where order_details.`bill_no`=billSno group by order_details.`bill_no`;
+select sum(qty_no*food_items.price) into cost from order_details join food_items on food_items.`id`=order_details.`item_id` where order_details.`bill_no`=billSno and status="Ordered" group by order_details.`bill_no`;
 return cost;
     end $$
 delimiter ;
